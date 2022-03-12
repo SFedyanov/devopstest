@@ -10,7 +10,6 @@ I used Ubuntu 20.0.4. Should work with other distributives.
  apt update
  apt upgrade
  apt autoremove
- apt install git
 ```
 
 * Git
