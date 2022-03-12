@@ -28,7 +28,9 @@ services:
 #    ports:
 #      - 27017:27017
     volumes:
-      - ./database:/data/db
+      - ./database/data:/data/db
+      - ./database/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
     environment:
       ENV_NAME: test
+      ENV_USER_EXPIRE_AFTER_SECONDS: ${USER_EXPIRE_AFTER_SECONDS:-86400}
     restart: unless-stopped
