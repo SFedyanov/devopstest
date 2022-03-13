@@ -38,3 +38,16 @@ I used Ubuntu 20.0.4. Should work with other distributives.
 delete the data that has been inserted for more than X amount of seconds
 Dafault value in docker-compose is 86400 seconds. It is 1 day.
 `USER_EXPIRE_AFTER_SECONDS=60`
+
+## Database
+### Backup 
+
+Backup is performed every Thursday at 3 o'clock.
+
+Manual backup can be started using the command:
+`docker-compose exec database ./backup.sh`
+
+Backup files stored in database/backup/
+
+To restore it use command:
+`docker-compose exec database mongorestore /backup/<<backup_folder_name>>`
