@@ -33,10 +33,14 @@ I used Ubuntu 20.0.4. Should work with other distributives.
 ```
 
 ## Variables
-.env contains some variables
+`.env` contains some variables
 
-delete the data that has been inserted for more than X amount of seconds
+Delete the data that has been inserted for more than X amount of seconds.
+
 Dafault value in docker-compose is 86400 seconds. It is 1 day.
+
+Tu change it uncomment next line in `.env`
+
 `USER_EXPIRE_AFTER_SECONDS=60`
 
 ## Database
