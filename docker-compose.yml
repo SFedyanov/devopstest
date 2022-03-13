@@ -5,6 +5,8 @@ services:
     build: 
       context: frontend/.
       dockerfile: Dockerfile
+    depends_on:
+      - backend
     ports: 
       - 80:80
     environment: 
@@ -16,6 +18,8 @@ services:
     build:
       context: backend/.
       dockerfile: Dockerfile
+    depends_on:
+      - database
 #    ports:
 #      - 8080:8080
     environment:
@@ -30,7 +34,26 @@ services:
     volumes:
       - ./database/data:/data/db
       - ./database/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - ./database/backup:/backup
     environment:
       ENV_NAME: test
       ENV_USER_EXPIRE_AFTER_SECONDS: ${USER_EXPIRE_AFTER_SECONDS:-86400}
     restart: unless-stopped
+#    labels:
+#      ofelia.enabled: "true"
+#      ofelia.job-exec.datecron.schedule: "@every 15s"
+#      ofelia.job-exec.datecron.command: "/backup/backup.sh"
+
+
+#  scheduler:
+#    image: mcuadros/ofelia:latest
+#    container_name: scheduler
+#    command: daemon --docker #--config=/etc/ofelia/config.ini
+#    volumes: 
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./scheduler/config.ini:/etc/ofelia/config.ini
+#    depends_on:
+#      - database
+#    labels:
+#      ofelia.job-local.my-test-job.schedule: "@every 5s"
+#      ofelia.job-local.my-test-job.command: "date"
