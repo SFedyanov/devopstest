@@ -60,7 +60,7 @@ services:
       context: mongo-cluster/.
       dockerfile: Dockerfile
     volumes:
-      - /database/data1:/data/db
+      - ./database/data1:/data/db
       - ./mongo-cluster/init.sh:/scripts/init.sh
       - ./database/backup:/backup
     environment:
@@ -80,7 +80,7 @@ services:
     container_name: mongo2
     image: mongo:4.4
     volumes:
-      - /database/data2:/data/db
+      - ./database/data2:/data/db
     networks:
       - mongors-network
 #    ports:
@@ -92,7 +92,7 @@ services:
     container_name: mongo3
     image: mongo:4.4
     volumes:
-      - /database/data3:/data/db
+      - ./database/data3:/data/db
     networks:
       - mongors-network
 #    ports:
