@@ -55,7 +55,10 @@ services:
 ## mongo cluster
   mongo1:
     container_name: mongo1
-    image: mongo:4.4
+#    image: mongo:4.4
+    build:
+      context: mongo-cluster/.
+      dockerfile: Dockerfile
     volumes:
       - /database/data1:/data/db
       - ./mongo-cluster/init.sh:/scripts/init.sh
