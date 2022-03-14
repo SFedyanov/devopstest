@@ -12,6 +12,8 @@ services:
       - 80:80
     environment: 
       ENV_NAME: test
+    networks:
+      - mongors-network
     restart: unless-stopped
 
   backend:
@@ -20,24 +22,81 @@ services:
       context: backend/.
       dockerfile: Dockerfile
     depends_on:
-      - database
+#      - database
+      - mongo1
+      - mongo2
+      - mongo3
 #    ports:
 #      - 8080:8080
     environment:
       ENV_NAME: test
+    networks:
+      - mongors-network
     restart: unless-stopped
 
-  database:
-    container_name: database
-    build:
-      context: database/.
-      dockerfile: Dockerfile
-#    ports:
-#      - 27017:27017
+#  database:
+#    container_name: database
+#    build:
+#      context: database/.
+#      dockerfile: Dockerfile
+##    ports:
+##      - 27017:27017
+#    volumes:
+#      - ./database/data:/data/db
+#      - ./database/backup:/backup
+#    environment:
+#      ENV_NAME: test
+#      ENV_USER_EXPIRE_AFTER_SECONDS: ${USER_EXPIRE_AFTER_SECONDS:-86400}
+#    networks:
+#      - mongors-network
+#    restart: unless-stopped
+
+
+## mongo cluster
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4
     volumes:
-      - ./database/data:/data/db
+      - /database/data1:/data/db
+      - ./mongo-cluster/init.sh:/scripts/init.sh
       - ./database/backup:/backup
     environment:
       ENV_NAME: test
       ENV_USER_EXPIRE_AFTER_SECONDS: ${USER_EXPIRE_AFTER_SECONDS:-86400}
-    restart: unless-stopped
+    networks:
+      - mongors-network
+#    ports:
+#      - 27021:27017
+    links:
+      - mongo2
+      - mongo3
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4
+    volumes:
+      - /database/data2:/data/db
+    networks:
+      - mongors-network
+#    ports:
+#      - 27022:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4
+    volumes:
+      - /database/data3:/data/db
+    networks:
+      - mongors-network
+#    ports:
+#      - 27023:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+networks:
+  mongors-network:
+    driver: bridge

@@ -1,3 +1,3 @@
 module.exports = {
-  url: "mongodb://database:27017/users"
+  url: "mongodb://mongo1:27017,mongo2:27017,mongo3:27017?replicaSet=dbrs"
 };
