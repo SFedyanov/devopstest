@@ -30,6 +30,8 @@ I used Ubuntu 20.0.4. Should work with other distributives.
 
  cd devopstest
  docker-compose up -d
+ 
+ docker-compose exec mongo1 /scripts/init.sh
 ```
 
 ## Variables
@@ -50,10 +52,10 @@ Backup is performed every Thursday at 3 o'clock.
 
 Manual backup can be started using the command:
 
-`docker-compose exec database ./backup.sh`
+`docker-compose exec mongo1 ./backup.sh`
 
 Backup files stored in `database/backup/`
 
 To restore it use command:
 
-`docker-compose exec database mongorestore /backup/<<backup_folder_name>>`
+`docker-compose exec mongo1 mongorestore /backup/<<backup_folder_name>>`
